@@ -1568,7 +1568,7 @@ const VOCAB = {
         { h:'דלת',       tr:'Delet',       es:'Puerta',               en:'Door',                g:'f'  },
         { h:'מפתח',      tr:'Mafteakh',    es:'Llave',                en:'Key',                 g:'m'  },
         { h:'טלפון',     tr:'Telefon',     es:'Teléfono',             en:'Phone',               g:'m'  },
-        { h:'מחשב',      tr:'Makhshev',    es:'Computadora / Ordenador',en:'Computer',          g:'m'  },
+        { h:'מחשב',      tr:'Makhshev',    es:'Computadora',en:'Computer',          g:'m'  },
         { h:'בגד',       tr:'Beged',       es:'Ropa / Prenda',        en:'Clothes / Garment',   g:'m'  },
         { h:'שעה',       tr:"Sha'a",       es:'Hora',                 en:'Hour',                g:'f'  },
         { h:'שנה',       tr:'Shana',       es:'Año',                  en:'Year',                g:'f'  },
@@ -1578,7 +1578,7 @@ const VOCAB = {
     'Comida 🍎': [
         { h:'לחם',   tr:'Lechem',   es:'Pan',         en:'Bread',      g:'m' },
         { h:'תפוח',  tr:'Tapuach',  es:'Manzana',     en:'Apple',      g:'m' },
-        { h:'בננה',  tr:'Banana',   es:'Plátano',     en:'Banana',     g:'f' },
+        { h:'בננה',  tr:'Banana',   es:'Banana',     en:'Banana',     g:'f' },
         { h:'קפה',   tr:'Kafe',     es:'Café',        en:'Coffee',     g:'m' },
         { h:'תה',    tr:'Te',       es:'Té',          en:'Tea',        g:'m' },
         { h:'חלב',   tr:'Chalav',   es:'Leche',       en:'Milk',       g:'m' },
@@ -1593,7 +1593,7 @@ const VOCAB = {
         { h:'גזר',       tr:'Gezer',       es:'Zanahoria',            en:'Carrot',              g:'m'  },
         { h:'בצל',       tr:'Batsal',      es:'Cebolla',              en:'Onion',               g:'m'  },
         { h:'שום',       tr:'Shum',        es:'Ajo',                  en:'Garlic',              g:'m'  },
-        { h:'תפוח אדמה', tr:'Tapuakh Adama',es:'Papa / Patata (lit. "manzana de tierra")',en:'Potato',g:'f'},
+        { h:'תפוח אדמה', tr:'Tapuakh Adama',es:'Papa (lit. "manzana de tierra")',en:'Potato',g:'f'},
         { h:'אורז',      tr:'Orez',        es:'Arroz',                en:'Rice',                g:'m'  },
         { h:'פסטה',      tr:'Pasta',       es:'Pasta',                en:'Pasta',               g:'f'  },
         { h:'בשר',       tr:'Basar',       es:'Carne',                en:'Meat',                g:'m'  },
@@ -1705,7 +1705,7 @@ const VOCAB = {
     'Términos Judíos ✡️': [
         { h:'שַׁבָּת',       tr:'Shabbat',      es:'El Sábado judío — día de descanso', en:'Jewish Sabbath',      g:'f'  },
         { h:'שבת שלום',   tr:'Shabbat Shalom',es:'¡Buen Shabat! (saludo del viernes)', en:'Good Sabbath!',       g:null },
-        { h:'מַזָּל טוֹב',   tr:'Mazal Tov',    es:'¡Felicidades! / ¡Enhorabuena!',     en:'Congratulations!',    g:null },
+        { h:'מַזָּל טוֹב',   tr:'Mazal Tov',    es:'¡Felicidades! / ¡Felicitaciones!',     en:'Congratulations!',    g:null },
         { h:'מִצְוָה',      tr:'Mitzvá',       es:'Mandamiento / Buena acción',        en:'Commandment / Good deed', g:'f' },
         { h:'תִּיקּוּן עוֹלָם',tr:'Tikkun Olam', es:'Reparar el mundo',                  en:'Repair the world',    g:null },
         { h:'צְדָקָה',      tr:'Tzedakah',     es:'Caridad / Justicia',                en:'Charity / Justice',   g:'f'  },
@@ -1734,6 +1734,45 @@ const VOCAB = {
         { h:'שָׁנָה טוֹבָה',tr:'Shana Tova',  es:'¡Feliz Año Nuevo judío!',           en:'Happy New Year! (Jewish)', g:null },
         { h:'גְּמַר חֲתִימָה טוֹבָה',tr:'Gmar Khatima Tova',es:'Que seas inscrito/a en el libro de la vida (Yom Kipur)',en:'May you be sealed in the Book of Life',g:null},
     ],
+    'Astrología ♈': [
+        // — Signos del Zodíaco —
+        { h:'מַזָּל',                  tr:'Mazal',               es:'Signo del zodiaco / Suerte',               en:'Zodiac sign / Luck',           g:'m'  },
+        { h:'טָלֶה',                   tr:'Taleh',               es:'Aries (el carnero)',                        en:'Aries (the ram)',               g:'m'  },
+        { h:'שׁוֹר',                   tr:'Shor',                es:'Tauro (el toro)',                           en:'Taurus (the bull)',             g:'m'  },
+        { h:'תְּאוֹמִים',              tr:"Te'omim",             es:'Géminis (los gemelos)',                     en:'Gemini (the twins)',            g:'m'  },
+        { h:'סַרְטָן',                 tr:'Sartan',              es:'Cáncer (el cangrejo)',                      en:'Cancer (the crab)',             g:'m'  },
+        { h:'אַרְיֵה',                 tr:'Aryeh',               es:'Leo (el león)',                             en:'Leo (the lion)',                g:'m'  },
+        { h:'בְּתוּלָה',               tr:'Betula',              es:'Virgo (la virgen)',                         en:'Virgo (the virgin)',            g:'f'  },
+        { h:'מֹאזְנַיִם',              tr:"Mo'oznayim",          es:'Libra (la balanza)',                        en:'Libra (the scales)',            g:'m'  },
+        { h:'עַקְרָב',                 tr:'Akrav',               es:'Escorpio (el escorpión)',                   en:'Scorpio (the scorpion)',        g:'m'  },
+        { h:'קַשָּׁת',                 tr:'Kashat',              es:'Sagitario (el arquero)',                    en:'Sagittarius (the archer)',      g:'f'  },
+        { h:'גְּדִי',                  tr:'Gedi',                es:'Capricornio (el cabrito)',                  en:'Capricorn (the goat)',          g:'m'  },
+        { h:'דְּלִי',                  tr:'Deli',                es:'Acuario (el aguador)',                      en:'Aquarius (the water bearer)',   g:'m'  },
+        { h:'דָּגִים',                 tr:'Dagim',               es:'Piscis (los peces)',                        en:'Pisces (the fish)',             g:'m'  },
+        // — Planetas —
+        { h:'כּוֹכַב לֶכֶת',           tr:'Kokhav Lekhet',       es:'Planeta (lit. "estrella errante")',          en:'Planet',                       g:'m'  },
+        { h:'חַמָּה',                  tr:'Chama',               es:'El Sol (en astrología)',                    en:'The Sun',                      g:'f'  },
+        { h:'לְבָנָה',                 tr:'Levana',              es:'La Luna (lit. "la blanca")',                en:'The Moon',                     g:'f'  },
+        { h:'כּוֹכַב נֹגַהּ',          tr:'Kokhav Nogah',        es:'Venus (lit. "estrella del brillo")',         en:'Venus',                        g:'m'  },
+        { h:'מַאֲדִים',                tr:"Ma'adim",             es:'Marte (lit. "el rojizo")',                   en:'Mars',                         g:'m'  },
+        { h:'צֶדֶק',                   tr:'Tzedek',              es:'Júpiter (lit. "justicia")',                  en:'Jupiter',                      g:'m'  },
+        { h:'שַׁבְתַּאי',              tr:'Shabbetai',           es:'Saturno',                                   en:'Saturn',                       g:'m'  },
+        // — Conceptos astrológicos —
+        { h:'מַפַּת הַכּוֹכָבִים',     tr:'Mapat HaKokhavim',   es:'Carta natal / Mapa astral',                 en:'Birth chart',                   g:'f'  },
+        { h:'מַזָּל עוֹלֶה',           tr:'Mazal Ole',           es:'Ascendente (signo que sube al nacer)',      en:'Rising sign / Ascendant',       g:'m'  },
+        { h:'בֵּית',                   tr:'Beit',                es:'Casa astrológica (las 12 áreas de vida)',   en:'Astrological house',            g:'m'  },
+        { h:'רֶטְרוֹגְרַד',            tr:'Retrograd',           es:'Retrógrado (planeta aparenta retroceder)',  en:'Retrograde',                    g:null },
+        { h:'אֵשׁ',                    tr:'Esh',                 es:'Fuego (elemento — Aries, Leo, Sagitario)',  en:'Fire (element)',                g:'f'  },
+        { h:'אֲדָמָה',                 tr:'Adama',               es:'Tierra (elemento — Tauro, Virgo, Capric.)',en:'Earth (element)',               g:'f'  },
+        { h:'אֲוִיר',                  tr:'Avir',                es:'Aire (elemento — Géminis, Libra, Acuario)',en:'Air (element)',                 g:'m'  },
+        { h:'מַיִם',                   tr:'Mayim',               es:'Agua (elemento — Cáncer, Escorpio, Piscis)',en:'Water (element)',              g:'m'  },
+        { h:'הוֹרוֹסְקוֹפּ',           tr:'Horoskop',            es:'Horóscopo',                                 en:'Horoscope',                    g:'m'  },
+        { h:'גּוֹרָל',                 tr:'Goral',               es:'Destino / Suerte',                          en:'Fate / Destiny',                g:'m'  },
+        { h:'גַּלְגַּל הַמַּזָּלוֹת', tr:'Galgal HaMazalot',    es:'Rueda del zodiaco (los 12 signos)',         en:'Wheel of the zodiac',           g:'m'  },
+        { h:'כּוֹכַב שֶׁמֶשׁ',         tr:'Kokhav Shemesh',      es:'Signo solar (el signo de tu nacimiento)',   en:'Sun sign',                     g:'m'  },
+        { h:'אֱמוּנָה',                tr:'Emuna',               es:'Fe / Creencia',                             en:'Faith / Belief',                g:'f'  },
+    ],
+
 };
 
 const GRAMMAR = [
@@ -2204,7 +2243,7 @@ const GRAMMAR = [
             </div>
             <div class="es-box">
                 <div class="es-box-title">🇪🇸 ¡Conexión con el Español!</div>
-                <p>En español "tú" es igual para hombre y mujer. En hebreo no — al hablarle a una chica dices <strong>at (אַתְּ)</strong> y a un chico <strong>ata (אַתָּה)</strong>. ¡Esto también ocurre en el plural! Piénsalo como la diferencia entre "vosotros" y "vosotras" que sí existe en español, solo que extendida también al singular.</p>
+                <p>En español "tú" es igual para hombre y mujer. En hebreo no — al hablarle a una chica dices <strong>at (אַתְּ)</strong> y a un chico <strong>ata (אַתָּה)</strong>. ¡Esto también ocurre en el plural! Piénsalo como la diferencia entre "ustedes hombres" y "ustedes mujeres" — aunque en el español rioplatense no distinguimos el género del plural, ¡en hebreo sí existe! Y se extiende incluso al singular.</p>
                 <table>
                     <tr><th>Español</th><th>Hebreo (m.)</th><th>Hebreo (f.)</th></tr>
                     <tr><td>Yo</td><td colspan="2">אֲנִי (ani) — ¡igual para todos!</td></tr>
@@ -2215,7 +2254,7 @@ const GRAMMAR = [
                     <tr><td>Ellos / Ellas</td><td>הֵם (hem)</td><td>הֵן (hen)</td></tr>
                 </table>
             </div>
-            <div class="tip-box">💡 Truco fácil: Para "yo" y "nosotros" no hay distinción de género — ¡son iguales para todos! La distinción aparece en "tú" y "vosotros/ellos". Y אֲנִי (ani = yo) es la palabra más importante que aprenderás. ¡La usarás en cada frase!</div>
+            <div class="tip-box">💡 Truco fácil: Para "yo" y "nosotros" no hay distinción de género — ¡son iguales para todos! La distinción aparece en "vos/tú" y "ellos/ellas". Y אֲנִי (ani = yo) es la palabra más importante que aprenderás. ¡La usarás en cada frase!</div>
             <div class="gram-ex">
                 <h4>✏️ Ejercicio rápido</h4>
                 <div class="gram-ex-q">
@@ -2259,7 +2298,7 @@ const GRAMMAR = [
                     <p>אַתֶּם (atem) se usa para dirigirse a...</p>
                     <div class="gram-opts">
                         <button class="gram-opt" onclick="checkGrammarAnswer(this,false)">Un grupo de mujeres</button>
-                        <button class="gram-opt" data-correct="true" onclick="checkGrammarAnswer(this,true)">Un grupo mixto o de hombres (vosotros/ustedes masc.)</button>
+                        <button class="gram-opt" data-correct="true" onclick="checkGrammarAnswer(this,true)">Un grupo mixto o de hombres (ustedes masc.)</button>
                         <button class="gram-opt" onclick="checkGrammarAnswer(this,false)">Una sola persona</button>
                     </div>
                     <div class="gram-feedback"></div>
@@ -2464,7 +2503,7 @@ const GRAMMAR = [
             </div>
             <div class="es-box">
                 <div class="es-box-title">🇪🇸 ¡Conexión con el Español!</div>
-                <p>En español dices "mi casa", "tu amigo", "su libro" — el posesivo va antes del sustantivo. En hebreo es justo al revés: primero el sustantivo con artículo, luego שֶׁל + pronombre. Es como decir "la casa MÍA", "el amigo TUYO". Y fíjate que en español coloquial también lo usamos: "el coche de él", "la mochila de ella" — ¡exactamente como el hebreo!</p>
+                <p>En español dices "mi casa", "tu amigo", "su libro" — el posesivo va antes del sustantivo. En hebreo es justo al revés: primero el sustantivo con artículo, luego שֶׁל + pronombre. Es como decir "la casa MÍA", "el amigo TUYO". Y fíjate que en español coloquial también lo usamos: "el auto de él", "la mochila de ella" — ¡exactamente como el hebreo!</p>
                 <table>
                     <tr><th>Español</th><th>Hebreo (con shel)</th></tr>
                     <tr><td>mi libro</td><td>הַסֵּפֶר שֶׁלִּי (hasefer sheli)</td></tr>
@@ -4731,6 +4770,23 @@ const FLASHCARDS = [
     { cat:'✡️ Términos Judíos', q:'¿Qué significa "Kasher" (Kosher)?', heb:'כָּשֵׁר', tr:'Kasher', ans:'Kasher = permitido, apto bajo las leyes alimentarias judías. Se aplica a comida que cumple las normas de la Torah. ¡En Israel casi todo en el supermercado es kasher!' },
     { cat:'✡️ Términos Judíos', q:'¿Qué es el Rosh Hashaná?', heb:'רֹאשׁ הַשָּׁנָה', tr:'Rosh Hashaná', ans:'Rosh Hashaná = "cabeza del año" = Año Nuevo judío. Se celebra en otoño, con manzana y miel para desear un año dulce. El saludo es: "Shaná Tová!" (¡Buen año!)' },
     { cat:'✡️ Términos Judíos', q:'¿Qué es el Yom Kipur?', heb:'יוֹם כִּיפּוּר', tr:'Yom Kipur', ans:'Yom Kipur = Día del Perdón — el día más sagrado del judaísmo. Se ayuna 25 horas, se pide perdón y se reflexiona. Hasta los israelíes no religiosos suelen guardarlo.' },
+    // ── ASTROLOGÍA ──
+    { cat:'♈ Astrología', q:'¿Cómo se dice "signo del zodiaco" en hebreo?', heb:'מַזָּל', tr:'Mazal', ans:'Mazal (מַזָּל) — ¡la misma palabra de "Mazal Tov"! Originalmente significa signo del destino astral.' },
+    { cat:'♈ Astrología', q:'¿Cómo se dice "Aries" en hebreo?', heb:'טָלֶה', tr:'Taleh', ans:'Taleh (טָלֶה) — significa "cordero". ¡El primer signo del zodiaco hebreo!' },
+    { cat:'♈ Astrología', q:'¿Cómo se dice "Leo" en hebreo?', heb:'אַרְיֵה', tr:'Aryeh', ans:'Aryeh (אַרְיֵה) — significa literalmente "león". ¡También es un nombre hebreo muy común!' },
+    { cat:'♈ Astrología', q:'¿Cómo se dice "Escorpio" en hebreo?', heb:'עַקְרָב', tr:'Akrav', ans:'Akrav (עַקְרָב) — significa "escorpión". ¡Una de las palabras más llamativas del hebreo!' },
+    { cat:'♈ Astrología', q:'¿Cómo se dice "Géminis" en hebreo?', heb:'תְּאוֹמִים', tr:"Te'omim", ans:"Te'omim (תְּאוֹמִים) — significa literalmente 'gemelos'. ¡El plural de תְּאוֹם (te'om = gemelo)!" },
+    { cat:'♈ Astrología', q:'¿Cómo se dice "Piscis" en hebreo?', heb:'דָּגִים', tr:'Dagim', ans:'Dagim (דָּגִים) — significa "peces" (plural de דָּג, dag = pez). ¡El mismo dág que se come en Shabat!' },
+    { cat:'♈ Astrología', q:'¿Cómo se dice "Libra" en hebreo?', heb:'מֹאזְנַיִם', tr:"Mo'oznayim", ans:"Mo'oznayim (מֹאזְנַיִם) — significa 'balanza'. ¡Siempre en forma dual porque tiene dos platillos!" },
+    { cat:'♈ Astrología', q:'¿Cómo se llama el planeta Marte en hebreo?', heb:'מַאֲדִים', tr:"Ma'adim", ans:"Ma'adim (מַאֲדִים) — viene de אָדֹם (adom = rojo). ¡El planeta rojo tiene nombre rojo en hebreo!" },
+    { cat:'♈ Astrología', q:'¿Cómo se llama el planeta Júpiter en hebreo?', heb:'צֶדֶק', tr:'Tzedek', ans:'Tzedek (צֶדֶק) — significa "justicia". ¡Los astrónomos hebreos nombraron a Júpiter con el valor más elevado!' },
+    { cat:'♈ Astrología', q:'¿Cómo se dice "La Luna" en astrología hebrea?', heb:'לְבָנָה', tr:'Levana', ans:'Levana (לְבָנָה) — significa "la blanca". ¡De la misma raíz que לָבָן (lavan = blanco)!' },
+    { cat:'♈ Astrología', q:'¿Cómo se dice "carta natal" en hebreo?', heb:'מַפַּת הַכּוֹכָבִים', tr:'Mapat HaKokhavim', ans:'Mapat HaKokhavim — literalmente "mapa de las estrellas". ¡Tu cielo personal en el momento en que naciste!' },
+    { cat:'♈ Astrología', q:'¿Cómo se dice "ascendente" en hebreo?', heb:'מַזָּל עוֹלֶה', tr:'Mazal Ole', ans:'Mazal Ole — literalmente "signo que sube". עוֹלֶה viene del verbo לַעֲלוֹת (subir). ¡El signo que ascendía en el horizonte cuando naciste!' },
+    { cat:'♈ Astrología', q:'¿Cómo se dice "retrógrado" en hebreo?', heb:'רֶטְרוֹגְרַד', tr:'Retrograd', ans:'Retrograd (רֶטְרוֹגְרַד) — préstamo del inglés/latín. ¡Cuando un planeta aparenta moverse al revés! Muy temido con Mercurio.' },
+    { cat:'♈ Astrología', q:'¿Cuáles son los cuatro elementos en astrología hebrea?', heb:'אֵשׁ · אֲדָמָה · אֲוִיר · מַיִם', tr:'Esh · Adama · Avir · Mayim', ans:'Fuego (אֵשׁ) · Tierra (אֲדָמָה) · Aire (אֲוִיר) · Agua (מַיִם). ¡Los mismos cuatro elementos que en la Cábala!' },
+    { cat:'♈ Astrología', q:'¿Cómo se dice "horóscopo" en hebreo?', heb:'הוֹרוֹסְקוֹפּ', tr:'Horoskop', ans:'Horoskop (הוֹרוֹסְקוֹפּ) — préstamo del griego. ¡El hebreo adopta palabras internacionales con su propio acento!' },
+
 ];
 
 // ═══════════════════════════════════════
