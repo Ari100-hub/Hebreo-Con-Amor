@@ -257,6 +257,29 @@ section.active { display: block; }
     font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
 }
 
+/* ── Quiz Sparkline ── */
+.sparkline-card {
+    background: var(--paper); border: 1px solid var(--border); border-radius: 6px;
+    padding: 20px 22px; margin-bottom: 32px; position: relative;
+}
+.sparkline-card::before {
+    content: ''; position: absolute; top: 0; left: 18px; right: 18px;
+    height: 2px; background: var(--ink); opacity: 0.45;
+}
+.sparkline-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 14px; }
+.sparkline-title { font-size: 0.74em; color: var(--muted); font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; }
+.sparkline-legend { display: flex; gap: 12px; }
+.spark-legend-item { display: flex; align-items: center; gap: 4px; font-size: 0.7em; color: var(--muted); }
+.spark-legend-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+.sparkline-bars { display: flex; align-items: flex-end; gap: 5px; height: 52px; margin-bottom: 14px; }
+.sparkline-bar { flex: 1; border-radius: 2px 2px 0 0; background: var(--ink-pale); min-height: 3px; transition: opacity 0.2s; }
+.sparkline-bar.best { background: var(--gold); }
+.sparkline-bar.latest { background: var(--ink); }
+.sparkline-bar.empty-slot { background: var(--border-soft); opacity: 0.5; }
+.sparkline-stats { display: flex; gap: 28px; }
+.spark-stat-num { font-family: var(--serif); font-size: 1.5em; font-weight: 600; color: var(--ink); line-height: 1; }
+.spark-stat-label { font-size: 0.7em; color: var(--muted); font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; margin-top: 4px; }
+
 /* Fact card */
 .fact-card {
     background: var(--gold-pale);
@@ -996,6 +1019,20 @@ section.active { display: block; }
                toastSlideOut 0.35s cubic-bezier(.4,0,.2,1) 2.85s forwards;
 }
 
+.celebration-toast {
+    position: fixed; top: 88px; left: 50%; transform: translateX(-50%);
+    background: linear-gradient(135deg, #b8893a 0%, #d9b66e 100%);
+    color: #2a1c08; padding: 14px 36px; border-radius: 999px;
+    font-family: var(--sans); font-size: 1.05em; font-weight: 700;
+    box-shadow: 0 8px 32px rgba(184,137,58,0.55);
+    z-index: 10000; pointer-events: none; white-space: nowrap;
+    border: 1.5px solid rgba(255,255,255,0.5);
+    animation: celebIn 0.4s cubic-bezier(.4,0,.2,1),
+               celebOut 0.4s cubic-bezier(.4,0,.2,1) 3.2s forwards;
+}
+@keyframes celebIn  { from { opacity:0; transform:translateX(-50%) scale(0.8) translateY(-12px); } to { opacity:1; transform:translateX(-50%) scale(1) translateY(0); } }
+@keyframes celebOut { from { opacity:1; transform:translateX(-50%) scale(1) translateY(0); } to { opacity:0; transform:translateX(-50%) scale(0.9) translateY(-10px); } }
+
 @media (max-width: 800px) {
     .camino-steps { grid-template-columns: repeat(3, 1fr); }
 }
@@ -1078,6 +1115,8 @@ body[data-typescale="large"]   { font-size: 19px; }
         <div class="xp-streak-row" id="xpStreakRow"></div>
 
         <div class="stats-row" id="statsRow"></div>
+
+        <div id="quizSparklineRow"></div>
 
         <div id="palabraCard"></div>
 
@@ -1319,6 +1358,8 @@ body[data-typescale="large"]   { font-size: 19px; }
 
 <!-- Supabase SDK — loaded from CDN, no install needed -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<!-- canvas-confetti — lightweight celebration library -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
 
 <script>
 // ╔══════════════════════════════════════════════════════════════════╗
@@ -1392,35 +1433,35 @@ const VOCAB = {
         { h:'בהצלחה',    tr:'Behatzlacha',      es:'¡Buena suerte! / ¡Éxito!',  en:'Good luck!',              g:null },
     ],
     'Números 🔢': [
-        { h:'אחד',   tr:'Echad',   es:'Uno (m.)',    en:'One (masc.)',   g:'m' },
-        { h:'אחת',   tr:'Achat',   es:'Una (f.)',    en:'One (fem.)',    g:'f' },
-        { h:'שניים', tr:'Shnayim', es:'Dos (m.)',    en:'Two (masc.)',   g:'m' },
-        { h:'שתיים', tr:'Shtayim', es:'Dos (f.)',    en:'Two (fem.)',    g:'f' },
-        { h:'שלוש',  tr:'Shalosh', es:'Tres',        en:'Three',         g:null },
-        { h:'ארבע',  tr:'Arba',    es:'Cuatro',      en:'Four',          g:null },
-        { h:'חמש',   tr:'Chamesh', es:'Cinco',       en:'Five',          g:null },
-        { h:'שש',    tr:'Shesh',   es:'Seis',        en:'Six',           g:null },
-        { h:'שבע',   tr:'Sheva',   es:'Siete',       en:'Seven',         g:null },
-        { h:'שמונה', tr:'Shmone',  es:'Ocho',        en:'Eight',         g:null },
-        { h:'תשע',   tr:'Tesha',   es:'Nueve',       en:'Nine',          g:null },
-        { h:'עשר',   tr:'Eser',    es:'Diez',        en:'Ten',           g:null },
-        { h:'אחד עשר',   tr:'Achad Asar',  es:'Once',           en:'Eleven',        g:null },
-        { h:'שנים עשר',  tr:'Shneim Asar', es:'Doce',           en:'Twelve',        g:null },
-        { h:'חמישה עשר', tr:'Chamisha Asar',es:'Quince',        en:'Fifteen',       g:null },
-        { h:'עשרים',     tr:'Esrim',       es:'Veinte',         en:'Twenty',        g:null },
-        { h:'שלושים',    tr:'Shloshim',    es:'Treinta',        en:'Thirty',        g:null },
-        { h:'ארבעים',    tr:"Arba'im",     es:'Cuarenta',       en:'Forty',         g:null },
-        { h:'חמישים',    tr:'Chamishim',   es:'Cincuenta',      en:'Fifty',         g:null },
-        { h:'שישים',     tr:'Shishim',     es:'Sesenta',        en:'Sixty',         g:null },
-        { h:'שבעים',     tr:"Shiv'im",     es:'Setenta',        en:'Seventy',       g:null },
-        { h:'שמונים',    tr:'Shmonim',     es:'Ochenta',        en:'Eighty',        g:null },
-        { h:'תשעים',     tr:"Tish'im",     es:'Noventa',        en:'Ninety',        g:null },
-        { h:'מאה',       tr:"Me'a",        es:'Cien',           en:'One hundred',   g:null },
-        { h:'אלף',       tr:'Elef',        es:'Mil',            en:'One thousand',  g:'m'  },
         { h:'אפס',       tr:'Efes',        es:'Cero',           en:'Zero',          g:'m'  },
-        { h:'חצי',       tr:'Chatzi',      es:'Mitad / Medio',  en:'Half',          g:null },
-        { h:'הרבה',      tr:'Harbe',       es:'Mucho / Muchos', en:'A lot / Many',  g:null },
-        { h:'מעט',       tr:"Me'at",       es:'Poco / Un poco', en:'A little',      g:null },
+        { h:'אחד',       tr:'Echad',       es:'Uno (m.)',        en:'One (masc.)',   g:'m'  },
+        { h:'אחת',       tr:'Achat',       es:'Una (f.)',        en:'One (fem.)',    g:'f'  },
+        { h:'שניים',     tr:'Shnayim',     es:'Dos (m.)',        en:'Two (masc.)',   g:'m'  },
+        { h:'שתיים',     tr:'Shtayim',     es:'Dos (f.)',        en:'Two (fem.)',    g:'f'  },
+        { h:'שלוש',      tr:'Shalosh',     es:'Tres',            en:'Three',        g:null },
+        { h:'ארבע',      tr:'Arba',        es:'Cuatro',          en:'Four',         g:null },
+        { h:'חמש',       tr:'Chamesh',     es:'Cinco',           en:'Five',         g:null },
+        { h:'שש',        tr:'Shesh',       es:'Seis',            en:'Six',          g:null },
+        { h:'שבע',       tr:'Sheva',       es:'Siete',           en:'Seven',        g:null },
+        { h:'שמונה',     tr:'Shmone',      es:'Ocho',            en:'Eight',        g:null },
+        { h:'תשע',       tr:'Tesha',       es:'Nueve',           en:'Nine',         g:null },
+        { h:'עשר',       tr:'Eser',        es:'Diez',            en:'Ten',          g:null },
+        { h:'אחד עשר',   tr:'Achad Asar',  es:'Once',            en:'Eleven',       g:null },
+        { h:'שנים עשר',  tr:'Shneim Asar', es:'Doce',            en:'Twelve',       g:null },
+        { h:'חמישה עשר', tr:'Chamisha Asar',es:'Quince',         en:'Fifteen',      g:null },
+        { h:'עשרים',     tr:'Esrim',       es:'Veinte',          en:'Twenty',       g:null },
+        { h:'שלושים',    tr:'Shloshim',    es:'Treinta',         en:'Thirty',       g:null },
+        { h:'ארבעים',    tr:"Arba'im",     es:'Cuarenta',        en:'Forty',        g:null },
+        { h:'חמישים',    tr:'Chamishim',   es:'Cincuenta',       en:'Fifty',        g:null },
+        { h:'שישים',     tr:'Shishim',     es:'Sesenta',         en:'Sixty',        g:null },
+        { h:'שבעים',     tr:"Shiv'im",     es:'Setenta',         en:'Seventy',      g:null },
+        { h:'שמונים',    tr:'Shmonim',     es:'Ochenta',         en:'Eighty',       g:null },
+        { h:'תשעים',     tr:"Tish'im",     es:'Noventa',         en:'Ninety',       g:null },
+        { h:'מאה',       tr:"Me'a",        es:'Cien',            en:'One hundred',  g:null },
+        { h:'אלף',       tr:'Elef',        es:'Mil',             en:'One thousand', g:'m'  },
+        { h:'חצי',       tr:'Chatzi',      es:'Mitad / Medio',   en:'Half',         g:null },
+        { h:'הרבה',      tr:'Harbe',       es:'Mucho / Muchos',  en:'A lot / Many', g:null },
+        { h:'מעט',       tr:"Me'at",       es:'Poco / Un poco',  en:'A little',     g:null },
     ],
     'Colores 🎨': [
         { h:'אדום',  tr:'Adom',    es:'Rojo (m.)',    en:'Red (m.)',    g:'m' },
@@ -2940,6 +2981,17 @@ function checkStreak() {
         streak = 1;                  // first day ever, or streak broken
     }
 
+    // Streak milestone celebrations — deferred so DOM is ready
+    if (streak === 7 || streak === 14 || streak === 30) {
+        const msgs = {
+            7:  '🔥 ¡7 días seguidos! ¡Eres increíble!',
+            14: '🔥 ¡14 días seguidos! ¡Dedicación total!',
+            30: '🏆 ¡30 días seguidos! ¡Una verdadera estrella!'
+        };
+        requestAnimationFrame(() =>
+            _celebrate(`streak_${streak}`, streak >= 30 ? 'burst' : 'streak', msgs[streak]));
+    }
+
     // Daily bonus: +5 XP silently (no toast, it fires during init before DOM ready)
     xp += 5;
 
@@ -2957,8 +3009,14 @@ function checkStreak() {
 }
 
 function addXP(amount, reason) {
+    const _prevLevel = getLevel();
     xp += amount;
     localStorage.setItem('heb_xp', String(xp));
+    const _newLevel = getLevel();
+    if (_newLevel > _prevLevel) {
+        _celebrate(`level_${_newLevel}`, 'burst',
+            `${XP_LEVELS[_newLevel].emoji} ¡Subiste a ${XP_LEVELS[_newLevel].label}!`);
+    }
 
     // Keep activity date current
     const today = todayStr();
@@ -2987,6 +3045,56 @@ function showXPToast(amount, reason) {
     el.textContent = `+${amount} XP · ${msg}`;
     document.body.appendChild(el);
     setTimeout(() => { if (el.parentNode) el.parentNode.removeChild(el); }, 2400);
+}
+
+// ── Confetti celebration engine ────────────────────────────────────
+let _celebrated = JSON.parse(localStorage.getItem('heb_celebrated') || '[]');
+
+function _hasCelebrated(key) { return _celebrated.includes(key); }
+
+function _markCelebrated(key) {
+    if (!_celebrated.includes(key)) {
+        _celebrated.push(key);
+        localStorage.setItem('heb_celebrated', JSON.stringify(_celebrated));
+    }
+}
+
+function _launchConfetti(type) {
+    if (typeof window.confetti !== 'function') return;
+    const COLORS = ['#b8893a','#d9b66e','#1f3a5f','#2d5078','#b8553f','#6b7a3a','#faf5e9'];
+    const GOLD   = ['#b8893a','#d9b66e','#f6ecd4','#b8553f'];
+    const ROYAL  = ['#1f3a5f','#2d5078','#b8893a','#faf5e9'];
+    if (type === 'burst') {
+        // Big central burst — level-up, alphabet complete
+        window.confetti({ particleCount:150, spread:360, startVelocity:35,
+            origin:{ x:0.5, y:0.35 }, colors:COLORS, ticks:80, zIndex:9998 });
+    } else if (type === 'perfect') {
+        // Canons from both sides — perfect quiz
+        window.confetti({ particleCount:90, angle:60, spread:55,
+            startVelocity:45, origin:{ x:0 }, colors:GOLD, ticks:80, zIndex:9998 });
+        setTimeout(() =>
+            window.confetti({ particleCount:90, angle:120, spread:55,
+                startVelocity:45, origin:{ x:1 }, colors:ROYAL, ticks:80, zIndex:9998 }), 200);
+    } else if (type === 'streak') {
+        // Gentle rain from top — streak milestones
+        window.confetti({ particleCount:70, angle:90, spread:100,
+            startVelocity:22, origin:{ x:0.5, y:0 }, colors:GOLD, ticks:60, zIndex:9998 });
+    }
+}
+
+function _celebrate(key, type, message) {
+    if (_hasCelebrated(key)) return;
+    _markCelebrated(key);
+    _launchConfetti(type);
+    _showCelebrationToast(message);
+}
+
+function _showCelebrationToast(message) {
+    const el = document.createElement('div');
+    el.className = 'celebration-toast';
+    el.textContent = message;
+    document.body.appendChild(el);
+    setTimeout(() => { if (el.parentNode) el.parentNode.removeChild(el); }, 3800);
 }
 
 function renderStreakCard() {
@@ -3736,7 +3844,7 @@ function _prScore(heard, expected) {
 // ═══════════════════════════════════════
 function init() {
     checkStreak(); // must run before renderStreakCard
-    renderStats(); renderPalabra(); renderAlphabet();
+    renderStats(); renderQuizSparkline(); renderPalabra(); renderAlphabet();
     renderCatTabs(); renderVocab(); renderGrammar(); renderSentenceBuilder();
     startQuiz(); updatePill();
     renderStreakCard(); // render after DOM is ready
@@ -3764,6 +3872,58 @@ function renderStats() {
         <div class="stat-card"><div class="stat-number">${totalWords}</div><div class="stat-label">Palabras para Explorar</div></div>
         <div class="stat-card"><div class="stat-number">${GRAMMAR.length}</div><div class="stat-label">Lecciones de Gramática</div></div>
     `;
+}
+
+function renderQuizSparkline() {
+    const container = document.getElementById('quizSparklineRow');
+    if (!container) return;
+    const history = JSON.parse(localStorage.getItem('heb_quiz_history') || '[]');
+    if (history.length === 0) { container.innerHTML = ''; return; }
+
+    const best    = Math.max(...history);
+    const avg     = Math.round(history.reduce((a, b) => a + b, 0) / history.length);
+    const bestIdx = history.lastIndexOf(best);
+    const MAX_H   = 48;
+
+    // Pad left with empty slots so we always show 10 positions
+    const slots = 10;
+    const emptyCount = Math.max(0, slots - history.length);
+    const emptyBars = Array(emptyCount).fill(
+        `<div class="sparkline-bar empty-slot" style="height:4px"></div>`
+    ).join('');
+
+    const bars = history.map((score, i) => {
+        const h   = Math.max(4, Math.round((score / 100) * MAX_H));
+        const cls = (i === bestIdx && score === best) ? 'best'
+                  : (i === history.length - 1) ? 'latest' : '';
+        return `<div class="sparkline-bar ${cls}" style="height:${h}px" title="${score}%"></div>`;
+    }).join('');
+
+    container.innerHTML = `
+        <div class="sparkline-card">
+            <div class="sparkline-header">
+                <span class="sparkline-title">📊 Historial de Quizzes</span>
+                <div class="sparkline-legend">
+                    <span class="spark-legend-item"><span class="spark-legend-dot" style="background:var(--gold)"></span>Mejor</span>
+                    <span class="spark-legend-item"><span class="spark-legend-dot" style="background:var(--ink)"></span>Último</span>
+                </div>
+            </div>
+            <div class="sparkline-bars">${emptyBars}${bars}</div>
+            <div class="sparkline-stats">
+                <div>
+                    <div class="spark-stat-num">${best}%</div>
+                    <div class="spark-stat-label">Mejor puntaje</div>
+                </div>
+                <div>
+                    <div class="spark-stat-num">${avg}%</div>
+                    <div class="spark-stat-label">Promedio</div>
+                </div>
+                <div>
+                    <div class="spark-stat-num">${history.length}</div>
+                    <div class="spark-stat-label">${history.length === 1 ? 'Sesión' : 'Sesiones'}</div>
+                </div>
+            </div>
+        </div>`;
 }
 
 function renderPalabra() {
@@ -3848,7 +4008,13 @@ function toggleLearned(ch, e) {
     else learned.push(ch);
     localStorage.setItem('heb_learned', JSON.stringify(learned));
     renderAlphabet(); renderStats(); updatePill();
-    if (!wasLearned) addXP(5, 'letra'); // +5 XP when marking a letter learned
+    if (!wasLearned) {
+        addXP(5, 'letra'); // +5 XP when marking a letter learned
+        if (learned.length === ALPHABET.length) {
+            setTimeout(() => _celebrate('alphabet_complete', 'burst',
+                '🎉 ¡Completaste todo el Alef-Bet! ¡22 letras!'), 350);
+        }
+    }
 }
 
 function resetAlpha() {
@@ -3876,12 +4042,15 @@ function pickCat(cat, btn) {
 }
 
 function renderVocab() {
-    document.getElementById('vocabGrid').innerHTML = VOCAB[activeCat].map(w => {
+    const isNums = activeCat === 'Números 🔢';
+    const grid = document.getElementById('vocabGrid');
+    grid.style.direction = isNums ? 'rtl' : '';
+    grid.innerHTML = VOCAB[activeCat].map(w => {
         const key    = `vocab_${w.h}`;
         const hasRec = _recKeys.has(key);
         const hEsc   = w.h.replace(/'/g,"\\'");
         return `
-        <div class="vocab-card">
+        <div class="vocab-card" dir="ltr">
             <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:6px;">
                 <div class="v-hebrew" style="flex:1">${w.h}</div>
                 <div style="display:flex;gap:4px;flex-shrink:0;align-items:center;">
@@ -4185,6 +4354,15 @@ function renderResult() {
     if (pct > bestQuiz) {
         bestQuiz = pct;
         localStorage.setItem('heb_best_quiz', String(bestQuiz));
+    }
+    // Save to quiz history (last 10 sessions)
+    const _hist = JSON.parse(localStorage.getItem('heb_quiz_history') || '[]');
+    _hist.push(pct);
+    if (_hist.length > 10) _hist.shift();
+    localStorage.setItem('heb_quiz_history', JSON.stringify(_hist));
+    // First perfect quiz celebration
+    if (pct === 100) {
+        setTimeout(() => _celebrate('perfect_quiz', 'perfect', '🌟 ¡Puntuación perfecta! ¡100%!'), 450);
     }
     // +10 base XP + 2 XP per correct answer (max 30 XP per round)
     addXP(10 + qScore * 2, 'quiz'); // checkMilestones() fires inside addXP
@@ -4814,6 +4992,7 @@ function show(id) {
     document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
     document.getElementById(id).classList.add('active');
     document.querySelectorAll('nav button')[SECTIONS.indexOf(id)].classList.add('active');
+    if (id === 'home')     renderQuizSparkline();
     if (id === 'recursos') { renderSavedLists(); _loadPodcasts(); }
     if (id === 'tarjetas') { renderFCStats(); renderFCCatTabs(); renderFCGrid(); }
     window.scrollTo(0,0);
