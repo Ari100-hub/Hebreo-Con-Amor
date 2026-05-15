@@ -257,6 +257,52 @@ section.active { display: block; }
     font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
 }
 
+/* ── Sync code card (home tab) ── */
+.sync-code-card {
+    background: var(--paper); border: 1px solid var(--border); border-radius: 6px;
+    padding: 18px 22px; margin-top: 32px; display: flex; align-items: center;
+    gap: 18px; flex-wrap: wrap;
+}
+.sync-code-block { flex: 1; min-width: 180px; }
+.sync-code-label { font-size: 0.72em; color: var(--muted); font-weight: 500;
+    letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; }
+.sync-code-value { font-family: var(--serif); font-size: 1.6em; font-weight: 700;
+    color: var(--ink); letter-spacing: 0.06em; }
+.sync-code-hint { font-size: 0.78em; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+.sync-copy-btn { padding: 8px 18px; background: var(--ink); color: var(--paper);
+    border: none; border-radius: 999px; font-size: 0.82em; font-weight: 600;
+    cursor: pointer; transition: all 0.18s; white-space: nowrap; }
+.sync-copy-btn:hover { background: #0f2849; }
+.sync-change-btn { padding: 8px 14px; background: none; color: var(--muted);
+    border: 1px solid var(--border); border-radius: 999px; font-size: 0.78em;
+    cursor: pointer; transition: all 0.18s; white-space: nowrap; }
+.sync-change-btn:hover { border-color: var(--ink); color: var(--ink); }
+
+/* ── Sync onboard modal ── */
+.sync-modal-overlay {
+    position: fixed; inset: 0; background: rgba(31,58,95,0.55);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 10001; padding: 24px;
+}
+.sync-modal {
+    background: var(--paper); border-radius: 12px; padding: 36px 32px;
+    max-width: 400px; width: 100%; text-align: center;
+    box-shadow: 0 20px 60px rgba(15,28,48,0.25);
+}
+.sync-modal-icon { font-size: 2.8em; margin-bottom: 14px; }
+.sync-modal h3 { font-family: var(--serif); font-size: 1.35em; color: var(--ink);
+    margin-bottom: 10px; font-weight: 600; }
+.sync-modal p { font-size: 0.88em; color: var(--muted); line-height: 1.7;
+    margin-bottom: 20px; }
+.sync-modal input { width: 100%; padding: 11px 16px; border: 1px solid var(--border);
+    border-radius: 6px; font-size: 1.1em; font-family: var(--serif); text-align: center;
+    letter-spacing: 0.08em; color: var(--ink); margin-bottom: 14px;
+    background: var(--parchment); outline: none; }
+.sync-modal input:focus { border-color: var(--ink); }
+.sync-modal .btn { width: 100%; margin-bottom: 10px; }
+.sync-modal-error { font-size: 0.8em; color: var(--terra); margin-bottom: 10px;
+    display: none; }
+
 /* ── Quiz Sparkline ── */
 .sparkline-card {
     background: var(--paper); border: 1px solid var(--border); border-radius: 6px;
@@ -461,6 +507,9 @@ section.active { display: block; }
 }
 .cat-tab.active { background: var(--ink); color: var(--paper); border-color: var(--ink); font-weight: 600; }
 .cat-tab:hover:not(.active) { border-color: var(--ink); color: var(--ink); }
+.cat-tab.fav-tab { border-color: var(--terra); color: var(--terra); }
+.cat-tab.fav-tab.active { background: var(--terra); border-color: var(--terra); color: var(--paper); font-weight: 600; }
+.cat-tab.fav-tab:hover:not(.active) { background: var(--terra-pale); }
 
 .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
 .vocab-card {
@@ -594,6 +643,9 @@ section.active { display: block; }
 }
 .qt-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); font-weight: 600; }
 .qt-btn:hover:not(.active) { border-color: var(--ink); color: var(--ink); }
+.qt-btn.fav-qt { border-color: var(--terra); color: var(--terra); }
+.qt-btn.fav-qt.active { background: var(--terra); border-color: var(--terra); color: var(--paper); font-weight: 600; }
+.qt-btn.fav-qt:hover:not(.active) { background: var(--terra-pale); }
 
 .quiz-wrap { max-width: 620px; margin: 0 auto; }
 .quiz-card { background: var(--paper); border-radius: 6px; padding: 44px; box-shadow: var(--shadow-md); border: 1px solid var(--border); text-align: center; }
@@ -808,6 +860,20 @@ section.active { display: block; }
 }
 
 /* ════════════ PRONUNCIATION ════════════ */
+/* ── Favorites ── */
+.fav-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 30px; height: 30px; border-radius: 50%;
+    border: 1px solid var(--border); background: var(--paper);
+    cursor: pointer; font-size: 0.85em;
+    transition: all 0.18s; flex-shrink: 0; line-height: 1; padding: 0;
+}
+.fav-btn:hover { transform: scale(1.2); }
+.fav-btn.active { border-color: var(--terra); background: var(--terra-pale); }
+.fav-empty { grid-column: 1 / -1; text-align: center; padding: 48px 20px; color: var(--muted); }
+.fav-empty-icon { font-size: 2.8em; margin-bottom: 14px; }
+.fav-empty p { font-size: 0.92em; max-width: 300px; margin: 0 auto; line-height: 1.7; }
+
 .speak-btn {
     display: inline-flex; align-items: center; justify-content: center;
     width: 30px; height: 30px; border-radius: 50%;
@@ -1132,6 +1198,9 @@ body[data-typescale="large"]   { font-size: 19px; }
 
         <!-- Mi Camino milestone journey — rendered by JS -->
         <div id="caminoCard" class="camino-card"></div>
+
+        <!-- Sync code card — rendered by JS -->
+        <div id="syncCodeCard"></div>
     </section>
 
     <!-- ═══ ALPHABET ═══ -->
@@ -1182,6 +1251,7 @@ body[data-typescale="large"]   { font-size: 19px; }
             <button class="qt-btn active" onclick="setQuizType('vocab',this)">💬 Vocabulario</button>
             <button class="qt-btn" onclick="setQuizType('alpha',this)">🔤 Alfabeto</button>
             <button class="qt-btn" onclick="setQuizType('grammar',this)">📖 Gramática</button>
+            <button class="qt-btn fav-qt" onclick="setQuizType('favorites',this)">❤️ Favoritas</button>
         </div>
         <div class="quiz-wrap" id="quizArea"></div>
     </section>
@@ -2928,9 +2998,11 @@ const SENTENCES = [
 // ═══════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════
-let learned = JSON.parse(localStorage.getItem('heb_learned') || '[]');
+let learned   = JSON.parse(localStorage.getItem('heb_learned')   || '[]');
+let favorites = JSON.parse(localStorage.getItem('heb_favorites') || '[]');
 let activeCat = Object.keys(VOCAB)[0];
-let quizType = 'vocab';
+let quizType  = 'vocab';
+const FAV_CAT = '❤️ Mis Favoritas';
 let questions = [], qIdx = 0, qScore = 0, qAnswered = false;
 
 // ── XP & Streak state (additive — separate localStorage keys) ──
@@ -3030,6 +3102,7 @@ function addXP(amount, reason) {
     renderStreakCard();
     updatePill();
     checkMilestones(); // milestone 5: XP level Aprendiz
+    _scheduleSyncToCloud();
 }
 
 function showXPToast(amount, reason) {
@@ -3389,6 +3462,168 @@ function _initSupabaseSync() {
             if (status === 'SUBSCRIBED') _setSyncBadge('ok', `☁️ ${_recKeys.size} grabaciones`);
             if (status === 'CHANNEL_ERROR') _setSyncBadge('error', '⚠️ Sin conexión');
         });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CROSS-DEVICE PROGRESS SYNC
+// ═══════════════════════════════════════════════════════════════
+const PROGRESS_KEYS = [
+    'heb_xp','heb_streak','heb_last_date','heb_act_dates',
+    'heb_learned','heb_srs','heb_milestones','heb_grammar_total',
+    'heb_best_quiz','heb_quiz_history','heb_favorites',
+    'heb_yt_urls','heb_slides_urls','heb_celebrated'
+];
+
+let _syncCode  = localStorage.getItem('heb_sync_code') || null;
+let _syncTimer = null;
+
+function _generateSyncCode() {
+    const words = ['AMOR','SHALOM','CHAI','MAZEL','ORI','DAVID','ZION','NESHAMA'];
+    return words[Math.floor(Math.random() * words.length)] + '-' + (Math.floor(Math.random() * 900) + 100);
+}
+
+function _getProgressSnapshot() {
+    const snap = {};
+    PROGRESS_KEYS.forEach(k => { const v = localStorage.getItem(k); if (v !== null) snap[k] = v; });
+    return snap;
+}
+
+function _applyProgressSnapshot(snap) {
+    PROGRESS_KEYS.forEach(k => { if (snap[k] !== undefined) localStorage.setItem(k, snap[k]); });
+    // Reload all in-memory state
+    xp           = parseInt(localStorage.getItem('heb_xp')           || '0',  10);
+    streak       = parseInt(localStorage.getItem('heb_streak')       || '0',  10);
+    lastDate     = localStorage.getItem('heb_last_date')             || '';
+    actDates     = JSON.parse(localStorage.getItem('heb_act_dates')  || '[]');
+    learned      = JSON.parse(localStorage.getItem('heb_learned')    || '[]');
+    favorites    = JSON.parse(localStorage.getItem('heb_favorites')  || '[]');
+    milestones   = JSON.parse(localStorage.getItem('heb_milestones') || '[false,false,false,false,false]');
+    grammarTotal = parseInt(localStorage.getItem('heb_grammar_total')|| '0',  10);
+    bestQuiz     = parseInt(localStorage.getItem('heb_best_quiz')    || '0',  10);
+    srsData      = JSON.parse(localStorage.getItem('heb_srs')        || '{}');
+    _celebrated  = JSON.parse(localStorage.getItem('heb_celebrated') || '[]');
+}
+
+function _scheduleSyncToCloud() {
+    if (!_sb || !_syncCode) return;
+    clearTimeout(_syncTimer);
+    _syncTimer = setTimeout(_doSyncToCloud, 1500);
+}
+
+async function _doSyncToCloud() {
+    if (!_sb || !_syncCode) return;
+    _setSyncBadge('syncing', '⏫ Guardando...');
+    const { error } = await _sb.from('progress').upsert({
+        code: _syncCode, data: _getProgressSnapshot(),
+        updated_at: new Date().toISOString()
+    });
+    _setSyncBadge(error ? 'error' : 'ok', error ? '⚠️ Sin conexión' : '☁️ Sincronizado');
+}
+
+async function _loadProgressFromCloud(code) {
+    if (!_sb) return false;
+    const { data, error } = await _sb.from('progress').select('data').eq('code', code).single();
+    if (error || !data) return false;
+    _applyProgressSnapshot(data.data);
+    return true;
+}
+
+async function _initProgressSync() {
+    if (!_sb) return;
+    if (_syncCode) {
+        // Pull latest from cloud on every load so other-device changes appear
+        const { data } = await _sb.from('progress').select('data').eq('code', _syncCode).single();
+        if (data) {
+            _applyProgressSnapshot(data.data);
+            renderStreakCard(); renderStats(); renderQuizSparkline();
+            renderCatTabs(); renderVocab(); renderCamino(); updatePill();
+        }
+        _setSyncBadge('ok', '☁️ Sincronizado');
+        renderSyncCard();
+    } else {
+        // New device — show onboard modal after a short delay
+        setTimeout(_showSyncOnboardModal, 600);
+    }
+}
+
+function renderSyncCard() {
+    const el = document.getElementById('syncCodeCard');
+    if (!el || !_syncCode) return;
+    el.innerHTML = `
+        <div class="sync-code-card">
+            <div class="sync-code-block">
+                <div class="sync-code-label">🔑 Código de sincronización</div>
+                <div class="sync-code-value">${_syncCode}</div>
+                <div class="sync-code-hint">Ingrésalo en cualquier dispositivo para continuar donde lo dejaste</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+                <button class="sync-copy-btn" onclick="_copySyncCode(this)">📋 Copiar código</button>
+                <button class="sync-change-btn" onclick="_changeSyncCode()">Cambiar código</button>
+            </div>
+        </div>`;
+}
+
+function _copySyncCode(btn) {
+    navigator.clipboard.writeText(_syncCode).then(() => {
+        btn.textContent = '✅ ¡Copiado!';
+        setTimeout(() => { btn.textContent = '📋 Copiar código'; }, 2200);
+    }).catch(() => { prompt('Tu código de sincronización:', _syncCode); });
+}
+
+function _changeSyncCode() {
+    _showSyncOnboardModal(true);
+}
+
+function _showSyncOnboardModal(isChange = false) {
+    if (document.getElementById('syncOnboardModal')) return;
+    const title = isChange ? '¿Usar un código diferente?' : '¿Tienes un código de sincronización?';
+    const desc  = isChange
+        ? 'Ingresa un código existente para cargar ese progreso, o genera uno nuevo.'
+        : 'Si ya usaste esta plataforma en otro dispositivo, ingresa tu código para restaurar tu progreso.';
+    document.body.insertAdjacentHTML('beforeend', `
+        <div class="sync-modal-overlay" id="syncOnboardModal">
+            <div class="sync-modal">
+                <div class="sync-modal-icon">☁️</div>
+                <h3>${title}</h3>
+                <p>${desc}</p>
+                <input type="text" id="syncCodeInput" placeholder="Ej: AMOR-247" maxlength="15"
+                    oninput="this.value=this.value.toUpperCase()" />
+                <div class="sync-modal-error" id="syncModalError">Código no encontrado — verifica e intenta de nuevo</div>
+                <button class="btn btn-primary" onclick="_restoreWithCode()">Restaurar progreso</button>
+                <button class="btn btn-outline" onclick="_startFresh()">Generar nuevo código</button>
+                ${isChange ? `<button class="btn btn-outline" onclick="document.getElementById('syncOnboardModal').remove()" style="margin-top:0">Cancelar</button>` : ''}
+            </div>
+        </div>`);
+}
+
+async function _restoreWithCode() {
+    const input = document.getElementById('syncCodeInput');
+    const code  = input.value.trim().toUpperCase();
+    const errEl = document.getElementById('syncModalError');
+    if (!code) { input.style.borderColor = 'var(--terra)'; return; }
+    const btn = document.querySelector('#syncOnboardModal .btn-primary');
+    btn.textContent = 'Cargando...'; btn.disabled = true; errEl.style.display = 'none';
+    const ok = await _loadProgressFromCloud(code);
+    if (ok) {
+        _syncCode = code;
+        localStorage.setItem('heb_sync_code', code);
+        document.getElementById('syncOnboardModal').remove();
+        renderStreakCard(); renderStats(); renderQuizSparkline();
+        renderPalabra(); renderCatTabs(); renderVocab(); renderCamino(); updatePill();
+        renderSyncCard();
+        _showCelebrationToast('✅ ¡Progreso restaurado!');
+    } else {
+        btn.textContent = 'Restaurar progreso'; btn.disabled = false;
+        errEl.style.display = 'block'; input.style.borderColor = 'var(--terra)';
+    }
+}
+
+function _startFresh() {
+    _syncCode = _generateSyncCode();
+    localStorage.setItem('heb_sync_code', _syncCode);
+    document.getElementById('syncOnboardModal').remove();
+    renderSyncCard();
+    _doSyncToCloud();
 }
 
 function _refreshMicBtns() {
@@ -3859,6 +4094,8 @@ function init() {
     // Start Supabase sync (real-time — also pulls keys from cloud)
     _sbInit();
     _initSupabaseSync();
+    // Cross-device progress sync
+    _initProgressSync();
 }
 
 // ═══════════════════════════════════════
@@ -4029,9 +4266,12 @@ function resetAlpha() {
 // VOCABULARY
 // ═══════════════════════════════════════
 function renderCatTabs() {
-    document.getElementById('catTabs').innerHTML = Object.keys(VOCAB).map(cat => `
-        <button class="cat-tab ${cat===activeCat?'active':''}" onclick="pickCat('${cat}',this)">${cat}</button>
-    `).join('');
+    const vocabTabs = Object.keys(VOCAB).map(cat =>
+        `<button class="cat-tab ${cat===activeCat?'active':''}" onclick="pickCat('${cat.replace(/'/g,"\\'")}',this)">${cat}</button>`
+    ).join('');
+    const favLabel = favorites.length > 0 ? `❤️ Mis Favoritas (${favorites.length})` : '❤️ Mis Favoritas';
+    const favTab   = `<button class="cat-tab fav-tab ${activeCat===FAV_CAT?'active':''}" onclick="pickCat('${FAV_CAT}',this)">${favLabel}</button>`;
+    document.getElementById('catTabs').innerHTML = vocabTabs + favTab;
 }
 
 function pickCat(cat, btn) {
@@ -4042,12 +4282,28 @@ function pickCat(cat, btn) {
 }
 
 function renderVocab() {
-    const isNums = activeCat === 'Números 🔢';
-    const grid = document.getElementById('vocabGrid');
+    const isFavMode = activeCat === FAV_CAT;
+    const isNums    = activeCat === 'Números 🔢';
+    const grid      = document.getElementById('vocabGrid');
     grid.style.direction = isNums ? 'rtl' : '';
-    grid.innerHTML = VOCAB[activeCat].map(w => {
+
+    const words = isFavMode
+        ? Object.values(VOCAB).flat().filter(w => favorites.includes(w.h))
+        : VOCAB[activeCat];
+
+    if (isFavMode && words.length === 0) {
+        grid.innerHTML = `
+            <div class="fav-empty">
+                <div class="fav-empty-icon">🤍</div>
+                <p>¡Aún no tienes favoritas! Toca el ❤️ en cualquier tarjeta de vocabulario para guardarla aquí.</p>
+            </div>`;
+        return;
+    }
+
+    grid.innerHTML = words.map(w => {
         const key    = `vocab_${w.h}`;
         const hasRec = _recKeys.has(key);
+        const isFav  = favorites.includes(w.h);
         const hEsc   = w.h.replace(/'/g,"\\'");
         return `
         <div class="vocab-card" dir="ltr">
@@ -4056,6 +4312,7 @@ function renderVocab() {
                 <div style="display:flex;gap:4px;flex-shrink:0;align-items:center;">
                     ${SPEECH_SUPPORTED ? `<button class="speak-btn" data-key="${key}" onclick="speak('${hEsc}',event)" title="Escuchar pronunciación">🔊</button>` : ''}
                     <button class="mic-btn ${hasRec?'has-rec':''}" data-key="${key}" onclick="openStudioAt('${key}',event)" title="${hasRec?'Tienes una grabación — editar':'Grabar con tu voz'}">🎤</button>
+                    <button class="fav-btn ${isFav?'active':''}" onclick="toggleFavorite('${hEsc}',event)" title="${isFav?'Quitar de favoritas':'Guardar en favoritas'}">${isFav?'❤️':'🤍'}</button>
                 </div>
             </div>
             <div class="v-translit">${w.tr}</div>
@@ -4065,6 +4322,19 @@ function renderVocab() {
             ${w.g ? `<span class="v-gender ${w.g==='m'?'gm':'gf'}">${w.g==='m'?'♂ Masculino':'♀ Femenino'}</span>` : ''}
         </div>`;
     }).join('');
+}
+
+function toggleFavorite(h, e) {
+    e.stopPropagation();
+    if (favorites.includes(h)) {
+        favorites = favorites.filter(x => x !== h);
+    } else {
+        favorites.push(h);
+    }
+    localStorage.setItem('heb_favorites', JSON.stringify(favorites));
+    _scheduleSyncToCloud();
+    renderVocab();
+    renderCatTabs();
 }
 
 // ═══════════════════════════════════════
@@ -4251,7 +4521,19 @@ function shuffle(a) {
 }
 
 function buildQuestions() {
-    if (quizType === 'vocab') {
+    if (quizType === 'favorites') {
+        const all      = Object.values(VOCAB).flat();
+        const favWords = all.filter(w => favorites.includes(w.h));
+        return shuffle(favWords).slice(0,10).map(word => {
+            const wrong = shuffle(all.filter(w=>w.es!==word.es)).slice(0,3);
+            return {
+                prompt: '¿Qué significa esta palabra?',
+                hebrew: word.h, translit: word.tr,
+                correct: word.es,
+                opts: shuffle([word,...wrong]).map(o=>o.es)
+            };
+        });
+    } else if (quizType === 'vocab') {
         const all = Object.values(VOCAB).flat();
         return shuffle(all).slice(0,10).map(word => {
             const wrong = shuffle(all.filter(w=>w.es!==word.es)).slice(0,3);
@@ -4291,6 +4573,21 @@ function setQuizType(type, btn) {
 }
 
 function startQuiz() {
+    if (quizType === 'favorites') {
+        const favWords = Object.values(VOCAB).flat().filter(w => favorites.includes(w.h));
+        if (favWords.length < 4) {
+            document.getElementById('quizArea').innerHTML = `
+                <div class="result-card" style="text-align:center;padding:40px 24px;">
+                    <div style="font-size:2.8em;margin-bottom:16px;">🤍</div>
+                    <div style="font-family:var(--serif);font-size:1.3em;color:var(--ink);margin-bottom:10px;">Necesitas más favoritas</div>
+                    <div style="color:var(--muted);font-size:0.9em;line-height:1.7;max-width:280px;margin:0 auto;">
+                        Guarda al menos 4 palabras con ❤️ en Vocabulario para poder practicarlas aquí.
+                    </div>
+                    <button class="btn btn-primary" style="margin-top:22px;" onclick="show('vocabulary')">Ir a Vocabulario 📚</button>
+                </div>`;
+            return;
+        }
+    }
     questions = buildQuestions(); qIdx = 0; qScore = 0;
     renderQ();
 }
@@ -4502,6 +4799,7 @@ const SRS_BOX_COLORS = ['#c8b7ff', '#74b9ff', '#55efc4', '#fdcb6e', '#00b894'];
 
 function saveSRS() {
     localStorage.setItem('heb_srs', JSON.stringify(srsData));
+    _scheduleSyncToCloud();
 }
 
 function getSRS(idx) {
