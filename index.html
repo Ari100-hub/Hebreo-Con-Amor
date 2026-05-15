@@ -691,6 +691,15 @@ section.active { display: block; }
 .audio-upload-btn:hover { background: #0f2849; }
 #audioFileInput { display: none; }
 
+.podcast-list { margin-top: 18px; display: flex; flex-direction: column; gap: 12px; }
+.podcast-item { background: var(--paper); border: 1px solid var(--border); border-radius: 8px; padding: 16px 18px; }
+.podcast-item-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.podcast-item-name { font-family: var(--serif); font-size: 0.95em; color: var(--ink); font-weight: 600; font-style: italic; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.podcast-item audio { width: 100%; }
+.podcast-del-btn { background: none; border: none; cursor: pointer; font-size: 1em; color: var(--muted); padding: 2px 6px; border-radius: 4px; transition: all 0.18s; }
+.podcast-del-btn:hover { background: var(--terra); color: var(--paper); }
+.podcast-uploading { font-size: 0.88em; color: var(--gold); font-style: italic; margin-top: 10px; }
+
 .rec-empty { text-align: center; padding: 32px 20px; color: var(--muted); font-size: 0.92em; background: var(--cream); border-radius: 4px; font-style: italic; }
 .rec-empty span { font-size: 2em; display: block; margin-bottom: 10px; opacity: 0.4; font-style: normal; }
 
@@ -1266,13 +1275,14 @@ body[data-typescale="large"]   { font-size: 19px; }
         <!-- Audio Section -->
         <div class="rec-section">
             <h3>🎙️ Podcast de Audio</h3>
-            <p class="rec-desc">¿Descargaste el audio WAV o MP3 de NotebookLM? Cárgalo aquí para escucharlo directamente en la plataforma.</p>
+            <p class="rec-desc">¿Descargaste el audio WAV o MP3 de NotebookLM? Cárgalo aquí — se guarda automáticamente en la nube ☁️ y aparecerá en cualquier dispositivo donde abras la plataforma.</p>
             <div class="audio-player-wrap">
-                <div class="audio-label" id="audioLabel">Ningún archivo cargado todavía</div>
-                <label class="audio-upload-btn" for="audioFileInput">🎵 Elegir archivo de audio</label>
+                <div class="audio-label" id="audioLabel">Elige un archivo para subirlo a la nube</div>
+                <label class="audio-upload-btn" for="audioFileInput">🎵 Subir archivo de audio</label>
                 <input type="file" id="audioFileInput" accept="audio/*" onchange="loadAudioFile(this)">
-                <audio id="audioPlayer" controls style="display:none; width:100%; margin-top:14px;"></audio>
+                <div class="podcast-uploading" id="uploadStatus" style="display:none;"></div>
             </div>
+            <div class="podcast-list" id="podcastList"></div>
         </div>
 
         <!-- YouTube Section -->
@@ -4645,15 +4655,85 @@ function renderSlidesEmbed(id, url) {
 }
 
 // ── Audio ──
-function loadAudioFile(input) {
+async function loadAudioFile(input) {
     const file = input.files[0];
     if (!file) return;
-    const url = URL.createObjectURL(file);
-    const player = document.getElementById('audioPlayer');
-    const label = document.getElementById('audioLabel');
-    player.src = url;
-    player.style.display = 'block';
-    label.textContent = '🎵 ' + file.name;
+
+    const label  = document.getElementById('audioLabel');
+    const status = document.getElementById('uploadStatus');
+
+    label.textContent = '📁 ' + file.name;
+
+    if (!_sb) {
+        // No Supabase — play locally only
+        status.style.display = 'block';
+        status.textContent = '⚠️ Sin conexión a la nube — reproduciendo localmente';
+        const url = URL.createObjectURL(file);
+        const tmp = document.createElement('audio');
+        tmp.controls = true; tmp.src = url; tmp.style.cssText = 'width:100%;margin-top:12px;';
+        document.getElementById('podcastList').prepend(tmp);
+        return;
+    }
+
+    status.style.display = 'block';
+    status.textContent   = '⏫ Subiendo a la nube...';
+
+    // Safe storage key: podcasts/<timestamp>_<sanitized-name>
+    const safeName = file.name.replace(/[^a-zA-Z0-9._\-]/g, '_');
+    const key = 'podcasts/' + Date.now() + '_' + safeName;
+
+    const { error: upErr } = await _sb.storage.from('recordings').upload(key, file, { upsert: false });
+    if (upErr) {
+        status.textContent = '⚠️ Error al subir: ' + upErr.message;
+        return;
+    }
+
+    // Save metadata to podcasts table
+    const { error: dbErr } = await _sb.from('podcasts').upsert({ id: key, name: file.name, ts: Date.now() });
+    if (dbErr) {
+        status.textContent = '⚠️ Archivo subido pero error al guardar metadatos: ' + dbErr.message;
+    } else {
+        status.textContent = '✅ ¡' + file.name + ' guardado en la nube!';
+        setTimeout(() => { status.style.display = 'none'; label.textContent = 'Subir otro archivo'; }, 3000);
+    }
+
+    _loadPodcasts();
+    // Reset input so same file can be re-uploaded if needed
+    input.value = '';
+}
+
+async function _loadPodcasts() {
+    const container = document.getElementById('podcastList');
+    if (!container || !_sb) return;
+
+    const { data, error } = await _sb.from('podcasts').select('*').order('ts', { ascending: false });
+    if (error) { console.warn('Error loading podcasts:', error); return; }
+
+    if (!data || data.length === 0) {
+        container.innerHTML = '<div class="rec-empty"><span>🎙️</span>Aún no has subido ningún podcast — ¡sube el primero arriba!</div>';
+        return;
+    }
+
+    container.innerHTML = data.map(p => {
+        const { data: urlData } = _sb.storage.from('recordings').getPublicUrl(p.id);
+        const publicUrl = urlData ? urlData.publicUrl : '';
+        return `
+        <div class="podcast-item" id="pod-${CSS.escape(p.id)}">
+            <div class="podcast-item-header">
+                <span class="podcast-item-name">🎵 ${p.name}</span>
+                <button class="podcast-del-btn" onclick="deletePodcast('${p.id.replace(/'/g,"\\'")}')">🗑️</button>
+            </div>
+            <audio class="podcast-item" controls src="${publicUrl}"></audio>
+        </div>`;
+    }).join('');
+}
+
+async function deletePodcast(id) {
+    if (!_sb) return;
+    if (!confirm('¿Eliminar este podcast de la nube?')) return;
+    await _sb.storage.from('recordings').remove([id]);
+    await _sb.from('podcasts').delete().eq('id', id);
+    _loadPodcasts();
 }
 
 // ── Saved media (localStorage) ──
@@ -4734,7 +4814,7 @@ function show(id) {
     document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
     document.getElementById(id).classList.add('active');
     document.querySelectorAll('nav button')[SECTIONS.indexOf(id)].classList.add('active');
-    if (id === 'recursos') renderSavedLists();
+    if (id === 'recursos') { renderSavedLists(); _loadPodcasts(); }
     if (id === 'tarjetas') { renderFCStats(); renderFCCatTabs(); renderFCGrid(); }
     window.scrollTo(0,0);
 }
